@@ -7,7 +7,7 @@ import sys
 
 SOURCE_URL = "http://www.69shu.com/"
 
-def import_book(book_id):
+def import_book(name, book_id):
     book_url = SOURCE_URL + str(book_id) + "/"
     parser = html5lib.HTMLParser(tree = html5lib.getTreeBuilder("lxml"),
                                  namespaceHTMLElements = False)
@@ -60,16 +60,31 @@ def import_book(book_id):
         else:
             print("  WARNING: Chapter %d missing" % (i))
     print("Wrote %d chapters." % (len(chapters)))
+
+    tmp_file = "output/tmp.html"
+    header = "<html><head><title>%s</title></head><body>" % (name)
+    head_cmd = "echo \"%s\" >> %s" % (header, tmp_file)
+    cat_cmd = "cat %s/* >> %s" % (output_path, tmp_file)
+    foot_cmd = "echo \"</body></html>\" >> %s" % (tmp_file)
+    if os.path.exists(tmp_file):
+      os.remove(tmp_file)
+    os.system(head_cmd)
+    os.system(cat_cmd)
+    os.system(foot_cmd)
+    os.system("kindlegen %s" % (tmp_file))
+
     print("Finished.")
 
 def main():
     """
     Entry point.
     """
-    if len(sys.argv) != 2:
-        print("Usage: book-importer.py <book_id>")
+    if len(sys.argv) != 3:
+        print("Usage: book-importer.py <name> <book_id>")
+        print("    name     between quotes.")
+        print("    book_id  id used at 69shu.com to locate the book.")
         return
-    import_book(sys.argv[1])
+    import_book(sys.argv[1], sys.argv[2])
 
 if __name__ == "__main__":
     main()
