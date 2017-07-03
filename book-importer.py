@@ -75,16 +75,26 @@ def import_book(name, book_id):
 
     print("Finished.")
 
+def send_book(email):
+    """
+    Sends imported book to email.
+    """
+    tmp_file = "output/tmp.html"
+    if os.path.exists(tmp_file):
+        os.system("echo \"\" | mutt -a \"output/tmp.html\" -s \"Book\" -- email")
+
 def main():
     """
     Entry point.
     """
     if len(sys.argv) != 3:
-        print("Usage: book-importer.py <name> <book_id>")
+        print("Usage: book-importer.py <name> <book_id> <kindle_email>")
         print("    name     between quotes.")
         print("    book_id  id used at 69shu.com to locate the book.")
+        print("    kindle_email your kindle email.")
         return
     import_book(sys.argv[1], sys.argv[2])
+    send_book(sys.argv[3])
 
 if __name__ == "__main__":
     main()
