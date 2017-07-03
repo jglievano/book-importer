@@ -81,7 +81,7 @@ def send_book(email):
     """
     tmp_file = "output/tmp.html"
     if os.path.exists(tmp_file):
-        os.system("echo \"\" | mutt -a \"output/tmp.html\" -s \"Book\" -- email")
+        os.system("echo \"\" | mutt -a \"output/tmp.mobi\" -s \"Book\" -- %s" % (email))
 
 def main():
     """
