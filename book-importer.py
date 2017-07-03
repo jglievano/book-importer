@@ -87,7 +87,7 @@ def main():
     """
     Entry point.
     """
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print("Usage: book-importer.py <name> <book_id> <kindle_email>")
         print("    name     between quotes.")
         print("    book_id  id used at 69shu.com to locate the book.")
