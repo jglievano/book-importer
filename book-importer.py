@@ -33,7 +33,8 @@ def import_book(name, book_id):
         os.makedirs(output_path)
 
     # Gets chapters and cleans.
-    for i in range(1, len(chapters) + 1):
+    numOfChapters = len(chapters)
+    for i in range(1, numOfChapters + 1):
         if i in chapters:
             url = "%s%s" % (SOURCE_URL, chapters[i][1][1:])
             with urlopen(url) as response:
@@ -56,7 +57,7 @@ def import_book(name, book_id):
                             out.write("<h2>%s</h2>\n" % (chapters[i][0]))
                             out.write("<br />\n")
                             out.write(html[2:-1])
-                            print("  Wrote chapter %d" % (i))
+                            print("  Wrote chapter %d or %d" % (i, numOfChapters), end='\r')
         else:
             print("  WARNING: Chapter %d missing" % (i))
     print("Wrote %d chapters." % (len(chapters)))
