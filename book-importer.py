@@ -19,14 +19,14 @@ def import_book(name, book_id):
         p_str = "<li><a href=\"/txt/%s/\\d+\">[0-9\.$&#;a-zA-Z \(\)~]+</a></li>" % (book_id)
         p = re.compile(p_str)
         chapters_html = p.findall(str(html))
+        n = 1
         for c in chapters_html:
             url_re = re.compile("/txt/%s/\\d+" % (book_id))
-            n_re = re.compile(">\d+\.")
-            chapter_re = re.compile("\..+</a>")
+            chapter_re = re.compile(">[0-9\.$&#;a-zA-Z \(\)~]+</a>")
             url = url_re.search(c).group()
-            n = n_re.search(c).group()[1:-1]
             chapter = chapter_re.search(c).group()[1:-4]
-            chapters[int(n)] = (chapter, url)
+            chapters[n] = (chapter, url)
+            n += 1
 
     output_path = "output/%s" % (book_id)
     if not os.path.exists(output_path):
@@ -36,6 +36,12 @@ def import_book(name, book_id):
     numOfChapters = len(chapters)
     for i in range(1, numOfChapters + 1):
         if i in chapters:
+            output_html = "%s/%08d.html" % (output_path, i)
+            if os.path.isfile(output_html):
+                # Skip
+                print("  Wrote chapter %d or %d" % (i, numOfChapters), end='\r')
+                continue
+
             url = "%s%s" % (SOURCE_URL, chapters[i][1][1:])
             with urlopen(url) as response:
                 doc = parser.parse(response)
