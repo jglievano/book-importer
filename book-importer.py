@@ -87,14 +87,14 @@ def main():
     """
     Entry point.
     """
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print("Usage: book-importer.py <name> <book_id> <kindle_email>")
         print("    name     between quotes.")
         print("    book_id  id used at 69shu.com to locate the book.")
-        print("    kindle_email your kindle email.")
+        #print("    kindle_email your kindle email.")
         return
     import_book(sys.argv[1], sys.argv[2])
-    send_book(sys.argv[3])
+    #send_book(sys.argv[3])
 
 if __name__ == "__main__":
     main()
